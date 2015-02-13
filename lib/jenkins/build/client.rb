@@ -1,5 +1,6 @@
 require 'uri'
 require 'json'
+require 'net/http'
 
 module Jenkins
   module Build
