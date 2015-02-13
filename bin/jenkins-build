@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+
+require 'jenkins/build'
+
+Jenkins::Build::CLI.start
