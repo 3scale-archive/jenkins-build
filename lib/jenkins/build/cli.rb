@@ -18,8 +18,7 @@ module Jenkins
         configuration.write
       end
 
-      option :branch, desc: 'Git branch to build', default: current_branch
-
+      option :branch, desc: 'Git branch', default: current_branch
       desc 'trigger', 'triggers build of a branch'
       def trigger
         unless configuration.exists?
@@ -29,6 +28,16 @@ module Jenkins
 
         client.trigger(branch)
         puts "Triggered build of #{configuration.project} with branch #{branch}."
+      end
+
+      option :branch, desc: 'Git branch', default: current_branch
+      desc 'status', 'prints status of a branch'
+      def status
+        unless system('which', 'hub')
+          warn 'install `hub` tool to get ci status (https://github.com/github/hub)'
+          exit 1
+        end
+        exec('hub', 'ci-status', branch, '-v')
       end
 
       private
