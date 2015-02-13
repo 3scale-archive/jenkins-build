@@ -33,7 +33,7 @@ module Jenkins
       option :branch, desc: 'Git branch', default: current_branch
       desc 'status', 'prints status of a branch'
       def status
-        unless system('which', 'hub')
+        unless system('which', 'hub', out: '/dev/null')
           warn 'install `hub` tool to get ci status (https://github.com/github/hub)'
           exit 1
         end
