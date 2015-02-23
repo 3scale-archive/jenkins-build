@@ -9,14 +9,19 @@ Install it from rubygems.org:
 gem install jenkins-build
 ```
 
-
 ## Usage
 
-You have to configure `jenkins-build` to use your jenkins server and project.
-Do that by running:
+First, you need to get your user and API Key for Jenkins. To do that you need to
+log in, in the right corner click your name, then click Configure in the left
+sidebar and finally press 'Show API Token'. You'll need later both the User ID
+and API Token.
+
+Then you have to configure `jenkins-build` to use your jenkins server and
+project. Do that by running:
 
 ```shell
-jenkins-build configure
+jenkins-build configure --api-key JENKINS_API_KEY --user JENKINS_USER_ID
+--server JENKINS_SERVER_URL --project JENKINS_PROJECT_NAME
 ```
 
 And then you can trigger build by running:
@@ -25,14 +30,15 @@ And then you can trigger build by running:
 jenkins-build trigger
 ```
 
-To get your API Key go to your Jenkins, log in, in the right corner click your name, then click
-Configuration in the left sidebar and finally press 'Show API Token'.
-
 ## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `bin/console` for an interactive prompt that will allow you to experiment.
+After checking out the repo, run `bin/setup` to install dependencies. Then, run
+`bin/console` for an interactive prompt that will allow you to experiment.
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release` to create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+To install this gem onto your local machine, run `bundle exec rake install`. To
+release a new version, update the version number in `version.rb`, and then run
+`bundle exec rake release` to create a git tag for the version, push git commits
+and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
 
 ## Contributing
 
