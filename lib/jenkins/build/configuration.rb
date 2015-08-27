@@ -1,5 +1,6 @@
 require 'pathname'
 require 'yaml/store'
+require 'forwardable'
 
 module Jenkins
   module Build

@@ -49,9 +49,11 @@ module Jenkins
 
       desc 'failures', 'prints failed tests and how to run them'
       def failures
-        ci_status = self.ci_status
-
-        build = ci_status.build || Jenkins::Build::Build.new(jenkins_job_url)
+        if options[:job] || options[:build]
+          build = Jenkins::Build::Build.new(jenkins_job_url)
+        else
+          build = self.ci_status.build || Jenkins::Build::Build.new(jenkins_job_url)
+        end
 
         report = client.test_report(number: build.number, project: build.job)
 

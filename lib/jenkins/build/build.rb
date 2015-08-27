@@ -1,8 +1,8 @@
 module Jenkins
   module Build
     class Build
-      BUILDS = %w[\d+ lastBuild lastStableBuild lastSuccessfulBuild lastFailedBuild lastUnstableBuild lastUnsuccessfulBuild lastCompletedBuild].freeze
-      JENKINS_PATH = %r{^/jobs/(?<job>[\w-]+)/(?<build_number>#{Regexp.union(BUILDS)})}.freeze
+      BUILDS = %w[lastBuild lastStableBuild lastSuccessfulBuild lastFailedBuild lastUnstableBuild lastUnsuccessfulBuild lastCompletedBuild].freeze
+      JENKINS_PATH = %r{^/jobs?/(?<job>[\w-]+)/(?<build_number>\d+|#{Regexp.union(BUILDS)})}.freeze
       NUMBER = /\A\d+\z/.freeze
 
       attr_reader :uri, :job, :number
