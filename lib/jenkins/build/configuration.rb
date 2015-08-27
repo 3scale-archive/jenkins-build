@@ -9,6 +9,16 @@ module Jenkins
 
       CONFIG_KEYS = [:server, :project, :api_key, :user]
 
+      class << self
+        extend Forwardable
+
+        def current
+          new(Dir.pwd)
+        end
+
+        def_delegators :current, *CONFIG_KEYS
+      end
+
       def initialize(folder)
         @config = Pathname(CONFIG).expand_path(folder).freeze
         @store = YAML::Store.new(@config)
