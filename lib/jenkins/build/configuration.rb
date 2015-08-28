@@ -1,5 +1,6 @@
 require 'pathname'
 require 'yaml/store'
+require 'forwardable'
 
 module Jenkins
   module Build
@@ -8,6 +9,16 @@ module Jenkins
       CONFIG = Pathname('.jenkins-build').freeze
 
       CONFIG_KEYS = [:server, :project, :api_key, :user]
+
+      class << self
+        extend Forwardable
+
+        def current
+          new(Dir.pwd)
+        end
+
+        def_delegators :current, *CONFIG_KEYS
+      end
 
       def initialize(folder)
         @config = Pathname(CONFIG).expand_path(folder).freeze
