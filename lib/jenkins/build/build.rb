@@ -1,3 +1,5 @@
+require 'uri'
+
 module Jenkins
   module Build
     class Build

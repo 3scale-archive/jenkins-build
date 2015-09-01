@@ -44,7 +44,7 @@ module Jenkins
 
       option :branch, desc: 'Git branch', default: current_branch
       option :job, desc: 'Jenkins job', default: configuration.project
-      option :build, desc: 'Jenkins build number', default: 'lastBuild'
+      option :build, desc: 'Jenkins build number', default: 'lastCompletedBuild'
 
       desc 'failures', 'prints failed tests and how to run them'
       def failures
