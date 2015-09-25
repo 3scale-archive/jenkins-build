@@ -20,8 +20,12 @@ module Jenkins
         @connection
       end
 
-      def trigger(branch)
-        response = post("/job/#{@configuration.project}/build", parameter: { name: :sha1, value: branch })
+      def trigger(branch, parameters = {})
+        params = parameters.merge(sha1: branch).map do |key, value|
+          { name: key, value: value }
+        end
+
+        response = post_json("/job/#{@configuration.project}/build", parameter: params)
         case response
           when Net::HTTPCreated then true
           else
@@ -54,23 +58,24 @@ module Jenkins
 
       def post(path, params)
         uri = URI.join(@base_uri, path)
-        body = JSON.generate(params)
 
-        post = Net::HTTP::Post.new(uri, json_header)
-        post.set_form_data json: body
+        post = Net::HTTP::Post.new(uri)
+        post.set_form_data params
 
         request(post)
+      end
+
+      def post_json(path, params)
+        body = JSON.generate(params)
+
+        post(path, { json: body })
       end
 
       def get(path)
         uri = URI.join(@base_uri, path)
-        post = Net::HTTP::Get.new(uri)
+        get = Net::HTTP::Get.new(uri)
 
-        request(post)
-      end
-
-      def json_header
-        { 'Content-Type' => 'application/json' }
+        request(get)
       end
 
       def request(request)
