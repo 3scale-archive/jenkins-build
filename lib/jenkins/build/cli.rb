@@ -23,15 +23,16 @@ module Jenkins
       end
 
       option :branch, desc: 'Git branch', default: current_branch
-      desc 'trigger', 'triggers build of a branch'
-      def trigger
+      desc 'trigger PARAMS', 'triggers build of a branch'
+      def trigger(*params)
         unless configuration.exists?
           warn "must run: 'jenkins-build configure' first"
           exit(1)
         end
 
-        client.trigger(branch)
-        puts "Triggered build of #{configuration.project} with branch #{branch}."
+        params_hash = params.map{|param| param.split('=') }.to_h
+        client.trigger(branch, params_hash)
+        puts "Triggered build of #{configuration.project} with branch #{branch} #{params.join(' ')}"
       end
 
       option :branch, desc: 'Git branch', default: current_branch
