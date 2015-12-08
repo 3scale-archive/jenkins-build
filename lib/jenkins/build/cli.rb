@@ -40,7 +40,7 @@ module Jenkins
       def status
         ci_status = self.ci_status
 
-        puts "#{ci_status.status}: #{ci_status.uri}"
+        puts "#{ci_status.status}: #{ci_status.build.uri}"
       end
 
       option :branch, desc: 'Git branch', default: current_branch
