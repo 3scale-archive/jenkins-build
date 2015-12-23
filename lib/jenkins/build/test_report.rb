@@ -78,12 +78,13 @@ module Jenkins
       end
 
       class Status
+        FAILURES = %w[FAILED REGRESSION]
         def initialize(status)
           @status = status
         end
 
         def failure?
-          @status == 'FAILED'.freeze
+          FAILURES.include?(@status)
         end
 
         def success?
@@ -102,7 +103,7 @@ module Jenkins
 
         def cause(project_path = root_path)
           stack_trace.lazy.reverse_each.
-            map { |path| relative_path(path, project_path) }.
+            map { |path| relative_path(path, project_path || root_path) }.
             find(&method(:test_stack_frame?))
         end
 
