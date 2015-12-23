@@ -30,6 +30,14 @@ And then you can trigger build by running:
 jenkins-build trigger
 ```
 
+Or you can get failures from specific build:
+
+```shell
+jenkins-build failures --build=2372
+```
+
+If you don't supply build number, it will try to detect it via `hub` command from github status.
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run
