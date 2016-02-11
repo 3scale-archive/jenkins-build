@@ -20,8 +20,7 @@ Then you have to configure `jenkins-build` to use your jenkins server and
 project. Do that by running:
 
 ```shell
-jenkins-build configure --api-key JENKINS_API_KEY --user JENKINS_USER_ID
---server JENKINS_SERVER_URL --project JENKINS_PROJECT_NAME
+jenkins-build configure --api-key JENKINS_API_TOKEN --user JENKINS_USER_ID --server JENKINS_SERVER_URL --project JENKINS_PROJECT_NAME
 ```
 
 And then you can trigger build by running:
