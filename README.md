@@ -13,14 +13,18 @@ gem install jenkins-build
 
 First, you need to get your user and API Key for Jenkins. To do that you need to
 log in, in the right corner click your name, then click Configure in the left
-sidebar and finally press 'Show API Token'. You'll need later both the User ID
-and API Token.
+sidebar and finally press 'Show API Token'. 
+
+You'll need later both the User ID (JENKINS_USER_ID) and API Token (JENKINS_API_TOKEN).
+
+You also need the domain where you have your jenkins server running  (JENKINS_SERVER_URL) 
+and the job you want to run (JENKINS_JOB_NAME)
 
 Then you have to configure `jenkins-build` to use your jenkins server and
 project. Do that by running:
 
 ```shell
-jenkins-build configure --api-key JENKINS_API_TOKEN --user JENKINS_USER_ID --server JENKINS_SERVER_URL --project JENKINS_PROJECT_NAME
+jenkins-build configure --api-key JENKINS_API_TOKEN --user JENKINS_USER_ID --server JENKINS_SERVER_URL --project JENKINS_JOB_NAME
 ```
 
 And then you can trigger build by running:
