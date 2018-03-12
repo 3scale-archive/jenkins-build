@@ -67,8 +67,31 @@ module Jenkins
           status.failure?
         end
 
+        ORA = Struct.new(:id, :message)
+
+        def extract_ora(str)
+          return unless str
+
+          if (match = str.match(/(ORA-\d{5}): ([^:]+)/))
+            ORA.new(match[1], match[2])
+          end
+        end
+
+        def ora
+          extract_ora(@test.fetch('errorDetails')) || extract_ora(stack_trace.stderr)
+        end
+
         def cause(path)
-          stack_trace.cause(path)
+          o = ora
+          msg = stack_trace.cause(path)
+
+          if ora
+            msg = "#{msg},#{o.id},#{o.message.delete('"')}"
+          else
+            msg = "#{msg},,"
+          end
+
+          msg
         end
 
         def project_path
