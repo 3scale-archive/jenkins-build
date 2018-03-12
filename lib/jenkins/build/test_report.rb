@@ -20,7 +20,7 @@ module Jenkins
       end
 
       def project_path
-        group = @cases.map(&:project_path).compact.group_by{ |path| path }.values.max_by(&:size) or return
+        group = @cases.map(&:project_path).compact.reject{|p| Pathname(p).relative? }.group_by{ |path| path }.values.max_by(&:size) or return
         group.first
       end
 
@@ -40,7 +40,7 @@ module Jenkins
         def build_case(test)
           status = Status.new(test.delete('status'.freeze))
           stack_trace = StackTrace.new(test.delete('errorStackTrace'))
-          Case.new(test, status, stack_trace)
+          TestCase.new(test, status, stack_trace)
         end
 
       end
@@ -54,7 +54,7 @@ module Jenkins
         end
       end
 
-      class Case
+      class TestCase
         attr_reader :status, :stack_trace
 
         def initialize(test, status, stack_trace)
@@ -97,7 +97,7 @@ module Jenkins
 
         def initialize(stderr)
           @stderr = stderr
-          @stack_trace = extract_stack_frames(stderr.to_s).flatten.compact.reject(&method(:system_path?))
+          @stack_trace = stack_frames.reject(&method(:system_path?))
           @root_path = longest_common_substr(stack_trace) || ''
         end
 
@@ -117,11 +117,15 @@ module Jenkins
           full_frame.sub(project_path, ''.freeze)
         end
 
-        RUBY_STACK_FRAME = /[^\w\/](\.?\/[\w._-][\/\w._-]+:\d+)/.freeze
+        RUBY_STACK_FRAME = /((?:\.?\/)?[\w._-][\/\w._-]+\.rb:\d+)/.freeze
         CUCUMBER_STACK_FRAME = /(features\/[\w._-][\/\w._-]+:\d+)/.freeze
 
         def extract_stack_frames(text)
           text.scan(RUBY_STACK_FRAME) + text.scan(CUCUMBER_STACK_FRAME)
+        end
+
+        def stack_frames
+          extract_stack_frames(stderr.to_s).flatten.compact
         end
 
         SYSTEM_PATHS = %w[/usr/lib /lib]
@@ -132,6 +136,7 @@ module Jenkins
 
         # http://stackoverflow.com/questions/2158313/finding-common-string-in-array-of-strings-ruby
         def longest_common_substr(strings)
+          strings = strings.select {|str| Pathname(str).absolute? }
           return unless strings.length > 1
           shortest = strings.min_by(&:length) or return
           maxlen = shortest.length
